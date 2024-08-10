@@ -1,6 +1,7 @@
-module.exports = function (req, res, next) {
+// middleware/auth.js
+module.exports = (req, res, next) => {
     if (req.isAuthenticated()) {
-        return next(); // User is authenticated, proceed to the next middleware/route
+        return next();
     }
-    res.redirect('/'); // User is not authenticated, redirect to the home page or login page
+    res.redirect('/auth/google'); // Redirect to login if not authenticated
 };

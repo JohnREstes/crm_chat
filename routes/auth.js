@@ -2,6 +2,14 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
+// Middleware to ensure the user is authenticated
+const ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login'); // Redirect to login page if not authenticated
+};
+
 // Route to handle Google OAuth login
 router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email']
@@ -9,18 +17,18 @@ router.get('/google', passport.authenticate('google', {
 
 // Callback route after Google has authenticated the user
 router.get('/google/callback', passport.authenticate('google', {
-    failureRedirect: '/'
+    failureRedirect: '/login' // Redirect to login page on failure
 }), (req, res) => {
-    res.redirect('/'); // Redirect to home page or any other page
+    res.redirect('/'); // Redirect to home page or any other page after successful login
 });
 
 // Route to handle logout
-router.get('/logout', (req, res) => {
+router.get('/logout', ensureAuthenticated, (req, res) => {
     req.logout((err) => {
         if (err) {
             return next(err); // Handle logout error
         }
-        res.redirect('/'); // Redirect after successful logout
+        res.redirect('/'); // Redirect to login page after successful logout
     });
 });
 
