@@ -1,0 +1,21 @@
+<!-- views/add-client.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Add New Client</h1>
+    <form action="/client/add" method="POST">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="phone" placeholder="Phone" required>
+        <textarea name="notes" placeholder="Notes"></textarea>
+        <button type="submit">Add Client</button>
+    </form>
+</body>
+</html>

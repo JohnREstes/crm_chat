@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Welcome to the CRM</h1>
+
+    <% if (!user) { %>
+        <a href="/auth/google" class="btn">Login with Google</a>
+    <% } else { %>
+        <p>Hello, <%= user.displayName %></p>
+        <a href="/auth/logout" class="btn">Logout</a>
+    <% } %>
+
+    <div>
+        <a href="/client">Manage Clients</a>
+        <a href="/email">Send Bulk Email</a>
+    </div>
+</body>
+</html>

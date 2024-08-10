@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Bulk Email</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Send Bulk Email</h1>
+    <form action="/email/send" method="POST">
+        <input type="text" name="subject" placeholder="Subject" required>
+        <textarea name="message" placeholder="Message" required></textarea>
+
+        <h3>Select Recipients:</h3>
+        <ul>
+            <% clients.forEach(client => { %>
+                <li>
+                    <input type="checkbox" name="recipients" value="<%= client.email %>">
+                    <label for="<%= client.email %>"><%= client.name %> (<%= client.email %>)</label>
+                </li>
+            <% }) %>
+        </ul>
+
+        <button type="submit">Send Email</button>
+    </form>
+</body>
+</html>

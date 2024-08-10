@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Clients</h1>
+
+    <!-- Form to add a new client -->
+    <form action="/client/add" method="POST">
+        <h2>Add New Client</h2>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="phone" placeholder="Phone" required>
+        <textarea name="notes" placeholder="Notes"></textarea>
+        <input type="text" name="address" placeholder="Address"> <!-- New field -->
+        <button type="submit">Add Client</button>
+    </form>
+    
+    <!-- List of existing clients -->
+    <ul>
+        <% clients.forEach(client => { %>
+        <li>
+            <form action="/client/edit/<%= client._id %>" method="POST">
+                <input type="text" name="name" value="<%= client.name %>" required>
+                <input type="email" name="email" value="<%= client.email %>" required>
+                <input type="text" name="phone" value="<%= client.phone %>" required>
+                <textarea name="notes"><%= client.notes %></textarea>
+                <input type="text" name="address" value="<%= client.address %>"> <!-- New field -->
+                <button type="submit">Save</button>
+            </form>
+        </li>
+        <% }); %>
+    </ul>
+</body>
+</html>
