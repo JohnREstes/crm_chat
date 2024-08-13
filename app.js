@@ -41,6 +41,7 @@ app.use('/auth', require('./routes/auth'));
 // Apply authentication middleware to protected routes
 app.use('/client', authMiddleware, require('./routes/client'));
 app.use('/email', authMiddleware, require('./routes/email'));
+app.use('/bulk-email', authMiddleware, require('./routes/email'));
 
 // Home route
 app.get('/', (req, res) => {
