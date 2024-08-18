@@ -1,3 +1,4 @@
+<!-- //views/clients.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +19,9 @@
         <input type="text" name="phone" placeholder="Phone" required>
         <textarea name="notes" placeholder="Notes"></textarea>
         <input type="text" name="address" placeholder="Address"> <!-- New field -->
+        <input type="text" name="creditCardNumber" placeholder="Credit Card Number"> <!-- New field -->
+        <input type="text" name="creditCardExpiry" placeholder="Expiry Date (MM/YY)"> <!-- New field -->
+        <input type="text" name="creditCardCVV" placeholder="CVV"> <!-- New field -->
         <button type="submit">Add Client</button>
     </form>
     
@@ -31,10 +35,35 @@
                 <input type="text" name="phone" value="<%= client.phone %>" required>
                 <textarea name="notes"><%= client.notes %></textarea>
                 <input type="text" name="address" value="<%= client.address %>"> <!-- New field -->
+
+                <!-- Display the last 4 digits always -->
+                <input type="text" name="creditCardNumber" 
+                    value="<%= client.decryptCreditCardNumber() ? client.decryptCreditCardNumber().slice(-4) : '' %>" readonly> <!-- Last 4 digits -->
+                
+                <!-- Full Credit Card Number with Show/Hide Toggle -->
+                <input type="password" id="full_cc_<%= client._id %>" 
+                    value="<%= client.decryptCreditCardNumber() ? client.decryptCreditCardNumber() : '' %>" 
+                    style="display:none;" readonly>
+                <button type="button" onclick="toggleCreditCard('full_cc_<%= client._id %>')">Show/Hide</button>
+
+                <input type="text" name="creditCardExpiry" value="<%= client.creditCardExpiry %>"> <!-- New field -->
+                <input type="text" name="creditCardCVV" value="<%= client.creditCardCVV %>"> <!-- New field -->
+                
                 <button type="submit">Save</button>
             </form>
         </li>
         <% }); %>
     </ul>
+
+    <script>
+        function toggleCreditCard(id) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+    </script>
 </body>
 </html>

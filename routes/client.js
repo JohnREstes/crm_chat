@@ -1,3 +1,4 @@
+//routes/client.js
 const express = require('express');
 const Client = require('../models/Client');
 const router = express.Router();
@@ -11,23 +12,29 @@ router.use(ensureAuthenticated);
 
 // Add a new client
 router.post('/add', async (req, res) => {
-    const { name, email, phone, notes, address } = req.body; // Include address
-    console.log('Received data for new client:', { name, email, phone, notes, address }); // Log data
-    const newClient = new Client({ name, email, phone, notes, address, user: req.user._id }); // Include address
+    const { name, email, phone, notes, address, creditCardNumber, creditCardExpiry, creditCardCVV } = req.body; // Include address
+    console.log('Received data for new client:', { name, email, phone, notes, address, creditCardExpiry, creditCardCVV }); // Log non-sensitive data
+    const newClient = new Client({ name, email, phone, notes, address, creditCardNumber, creditCardExpiry, creditCardCVV, user: req.user._id }); // Include address
     await newClient.save();
     res.redirect('/clients');
 });
 
 // Edit an existing client
 router.post('/edit/:id', async (req, res) => {
-    const { name, email, phone, notes, address } = req.body; // Include address
+    const { name, email, phone, notes, address, creditCardNumber, creditCardExpiry, creditCardCVV } = req.body; // Include address
     const client = await Client.findById(req.params.id);
     
     // Ensure `client` is found and user is authenticated
     if (client && req.user) {
         // Check if the user is the master user or the owner of the record
         if (req.user._id.toString() === masterUserId || client.user.toString() === req.user._id.toString()) {
-            await Client.findByIdAndUpdate(req.params.id, { name, email, phone, notes, address }); // Include address
+            const updateData = { name, email, phone, notes, address, creditCardExpiry, creditCardCVV }; // Only update non-sensitive data
+            
+            if (creditCardNumber) {
+                updateData.creditCardNumber = creditCardNumber;
+            }
+            
+            await Client.findByIdAndUpdate(req.params.id, updateData); // Include address
             res.redirect('/clients');
         } else {
             res.status(403).send('Forbidden');
