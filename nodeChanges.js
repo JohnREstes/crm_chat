@@ -35,6 +35,9 @@ app.get('/api/data', async (req, res) => {
     const yolandaData = getAllPlantData['4466']['devices']['UKDFBHG0GX']['statusData'];
     const casaMJData1 = getAllPlantData['25328']['devices']['XSK0CKS058']['statusData'];
     const casaMJData2 = getAllPlantData['25328']['devices']['XSK0CKS03A']['statusData'];
+    const yolandaDataTotal = getAllPlantData['4466']['devices']['UKDFBHG0GX']['totalData'];
+    const casaMJData1Total = getAllPlantData['25328']['devices']['XSK0CKS058']['totalData'];
+    const casaMJData2Total = getAllPlantData['25328']['devices']['XSK0CKS03A']['totalData'];
     const weatherDataYolanda = getAllPlantData['4466']['weather']['data']['HeWeather6'][0];
     const weatherDataCasaMJ = getAllPlantData['25328']['weather']['data']['HeWeather6'][0];
     
@@ -42,6 +45,9 @@ app.get('/api/data', async (req, res) => {
       yolandaData,
       casaMJData1,
       casaMJData2,
+      yolandaDataTotal,
+      casaMJData1Total,
+      casaMJData2Total,
       weatherDataYolanda,
       weatherDataCasaMJ
     });
