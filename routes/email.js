@@ -1,15 +1,17 @@
 // routes/email.js
 
-const express = require('express');
-const { SendEmailCommand } = require('@aws-sdk/client-ses');
-const sesClient = require('../config/aws');
-const Client = require('../models/Client');
+import express from 'express';
+import { SendEmailCommand } from '@aws-sdk/client-ses';
+import sesClient from '../config/aws.js';
+import Client from '../models/Client.js';
+import { ensureAuthenticated } from '../config/auth.js';
+
 const router = express.Router();
 
 // Middleware to ensure user is authenticated
-const { ensureAuthenticated } = require('../config/auth');
 router.use(ensureAuthenticated);
 
+// Route to view the email page
 router.get('/', async (req, res) => {
     try {
         const clients = await Client.find({ user: req.user._id }); // Fetch clients for the authenticated user
@@ -81,6 +83,4 @@ router.post('/send', async (req, res) => {
     }
 });
 
-
-
-module.exports = router;
+export default router;

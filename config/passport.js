@@ -1,7 +1,7 @@
 // config/passport.js
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/User'); // Adjust path if needed
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import User from '../models/User.js'; // Adjust path if needed
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -11,7 +11,11 @@ passport.use(new GoogleStrategy({
     try {
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
-            user = new User({ googleId: profile.id, displayName: profile.displayName, email: profile.emails[0].value });
+            user = new User({
+                googleId: profile.id,
+                displayName: profile.displayName,
+                email: profile.emails[0].value
+            });
             await user.save();
         }
         done(null, user);
@@ -32,3 +36,5 @@ passport.deserializeUser(async (id, done) => {
         done(err, null);
     }
 });
+
+export default passport;

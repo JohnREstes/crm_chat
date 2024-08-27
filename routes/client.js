@@ -1,8 +1,9 @@
 //routes/client.js
-const express = require('express');
-const Client = require('../models/Client');
+import express from 'express';
+import Client from '../models/Client.js';
+import { ensureAuthenticated } from '../config/auth.js';
+
 const router = express.Router();
-const { ensureAuthenticated } = require('../config/auth'); // Adjust path if needed
 
 // Define the master user ID (replace this with the actual master user ID)
 const masterUserId = process.env.MONGO_MASTER; // Replace with your master user ID
@@ -50,4 +51,5 @@ router.get('/', async (req, res) => {
     res.render('clients', { clients });
 });
 
-module.exports = router;
+export default router;
+

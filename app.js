@@ -1,24 +1,31 @@
-const express = require('express');
-const session = require('express-session');
-const passport = require('passport');
-const connectFlash = require('connect-flash');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const path = require('path');
-const connectDB = require('./config/db');
-const authMiddleware = require('./middleware/auth');
-const userMiddleware = require('./middleware/userMiddleware'); // Import the middleware
+//app.js
+
+import express from 'express';
+import session from 'express-session';
+import passport from 'passport';
+import connectFlash from 'connect-flash';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import path from 'path';
+import connectDB from './config/db.js';
+import authMiddleware from './middleware/auth.js';
+import userMiddleware from './middleware/userMiddleware.js';
+
+// Import routes using dynamic imports
+import authRoutes from './routes/auth.js';
+import clientRoutes from './routes/client.js';
+import emailRoutes from './routes/email.js';
 
 dotenv.config();
 connectDB();
 
 // Initialize Passport
-require('./config/passport');
+import './config/passport.js';
 
 const app = express();
 
 // Middleware
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(path.dirname(''), 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -36,12 +43,12 @@ app.use(userMiddleware);
 app.set('view engine', 'ejs');
 
 // Routes
-app.use('/auth', require('./routes/auth'));
+app.use('/auth', authRoutes);
 
 // Apply authentication middleware to protected routes
-app.use('/client', authMiddleware, require('./routes/client'));
-app.use('/email', authMiddleware, require('./routes/email'));
-app.use('/bulk-email', authMiddleware, require('./routes/email'));
+app.use('/client', authMiddleware, clientRoutes);
+app.use('/email', authMiddleware, emailRoutes);
+app.use('/bulk-email', authMiddleware, emailRoutes);
 
 // Home route
 app.get('/', (req, res) => {

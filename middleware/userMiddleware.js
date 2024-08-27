@@ -1,5 +1,8 @@
 // middleware/userMiddleware.js
-module.exports = (req, res, next) => {
+
+const userMiddleware = (req, res, next) => {
     res.locals.user = req.user;
     next();
 };
+
+export default userMiddleware;

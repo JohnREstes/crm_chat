@@ -1,5 +1,5 @@
 // config/aws.js
-const { SESClient } = require('@aws-sdk/client-ses');
+import { SESClient } from '@aws-sdk/client-ses';
 
 const sesClient = new SESClient({
     region: process.env.AWS_REGION,
@@ -9,5 +9,4 @@ const sesClient = new SESClient({
     }
 });
 
-module.exports = sesClient;
-
+export default sesClient;

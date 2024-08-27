@@ -1,5 +1,8 @@
-const express = require('express');
-const passport = require('passport');
+//routes/auth.js
+
+import express from 'express';
+import passport from 'passport';
+
 const router = express.Router();
 
 // Middleware to ensure the user is authenticated
@@ -23,13 +26,13 @@ router.get('/google/callback', passport.authenticate('google', {
 });
 
 // Route to handle logout
-router.get('/logout', ensureAuthenticated, (req, res) => {
+router.get('/logout', ensureAuthenticated, (req, res, next) => {
     req.logout((err) => {
         if (err) {
             return next(err); // Handle logout error
         }
-        res.redirect('/'); // Redirect to login page after successful logout
+        res.redirect('/'); // Redirect to home page after successful logout
     });
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
 // models/Client.js
-const mongoose = require('mongoose');
-const crypto = require('crypto');
+import mongoose from 'mongoose';
+import crypto from 'crypto';
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 // Encryption function
 const encrypt = (text) => {
@@ -66,4 +66,4 @@ clientSchema.methods.decryptCreditCardNumber = function() {
     return decrypt(this.creditCardNumber);
 };
 
-module.exports = mongoose.model('Client', clientSchema);
+export default mongoose.model('Client', clientSchema);
