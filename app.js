@@ -67,6 +67,10 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
+app.get(`${BASE_PATH}/`, (req, res) => {
+    res.render('index', { basePath: BASE_PATH });
+});
+
 
 // Start server
 const PORT = process.env.PORT || 3005;
