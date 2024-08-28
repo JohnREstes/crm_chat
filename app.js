@@ -1,5 +1,3 @@
-//app.js
-
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
@@ -7,6 +5,7 @@ import connectFlash from 'connect-flash';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url'; // Import fileURLToPath
 import connectDB from './config/db.js';
 import authMiddleware from './middleware/auth.js';
 import userMiddleware from './middleware/userMiddleware.js';
@@ -16,17 +15,25 @@ import authRoutes from './routes/auth.js';
 import clientRoutes from './routes/client.js';
 import emailRoutes from './routes/email.js';
 
+// Load environment variables
 dotenv.config();
 connectDB();
 
 // Initialize Passport
 import './config/passport.js';
 
+// Initialize Express
 const app = express();
+
+// Get current directory path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Base path from environment variables
 const BASE_PATH = process.env.BASE_PATH || '';
 
 // Middleware
-app.use(express.static(path.join(path.dirname(''), 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -44,31 +51,25 @@ app.use(userMiddleware);
 app.set('view engine', 'ejs');
 
 // Routes
-app.use('/auth', authRoutes);
-
-// Apply authentication middleware to protected routes
-app.use('/client', authMiddleware, clientRoutes);
-app.use('/email', authMiddleware, emailRoutes);
-app.use('/bulk-email', authMiddleware, emailRoutes);
+app.use(`${BASE_PATH}/auth`, authRoutes);
+app.use(`${BASE_PATH}/client`, authMiddleware, clientRoutes);
+app.use(`${BASE_PATH}/email`, authMiddleware, emailRoutes);
+app.use(`${BASE_PATH}/bulk-email`, authMiddleware, emailRoutes);
 
 // Home route
-app.get('/', (req, res) => {
-    res.render('index');
+app.get(`${BASE_PATH}/`, (req, res) => {
+    res.render('index', { basePath: BASE_PATH });
 });
 
 // Redirect route for '/clients'
-app.get('/clients', (req, res) => {
-    res.redirect('/client'); // Redirect to the '/client' route
+app.get(`${BASE_PATH}/clients`, (req, res) => {
+    res.redirect(`${BASE_PATH}/client`); // Redirect to the '/client' route
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
-});
-
-app.get(`${BASE_PATH}/`, (req, res) => {
-    res.render('index', { basePath: BASE_PATH });
 });
 
 // Start server
