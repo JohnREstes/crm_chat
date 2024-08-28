@@ -1,3 +1,5 @@
+//app.js
+
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
@@ -21,6 +23,7 @@ connectDB();
 import './config/passport.js';
 
 const app = express();
+const BASE_PATH = process.env.BASE_PATH || '';
 
 // Middleware
 app.use(express.static(path.join(path.dirname(''), 'public')));
@@ -40,25 +43,22 @@ app.use(userMiddleware);
 // Set up view engine
 app.set('view engine', 'ejs');
 
-// Base path from environment variable
-const BASE_PATH = process.env.BASE_PATH || '';
-
 // Routes
-app.use(`${BASE_PATH}/auth`, authRoutes);
+app.use('/auth', authRoutes);
 
 // Apply authentication middleware to protected routes
-app.use(`${BASE_PATH}/client`, authMiddleware, clientRoutes);
-app.use(`${BASE_PATH}/email`, authMiddleware, emailRoutes);
-app.use(`${BASE_PATH}/bulk-email`, authMiddleware, emailRoutes);
+app.use('/client', authMiddleware, clientRoutes);
+app.use('/email', authMiddleware, emailRoutes);
+app.use('/bulk-email', authMiddleware, emailRoutes);
 
 // Home route
-app.get(`${BASE_PATH}/`, (req, res) => {
+app.get('/', (req, res) => {
     res.render('index');
 });
 
 // Redirect route for '/clients'
-app.get(`${BASE_PATH}/clients`, (req, res) => {
-    res.redirect(`${BASE_PATH}/client`); // Redirect to the '/client' route
+app.get('/clients', (req, res) => {
+    res.redirect('/client'); // Redirect to the '/client' route
 });
 
 // Error handling middleware
@@ -66,6 +66,7 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
+
 
 // Start server
 const PORT = process.env.PORT || 3005;
