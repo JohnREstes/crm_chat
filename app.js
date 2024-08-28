@@ -71,7 +71,6 @@ app.get(`${BASE_PATH}/`, (req, res) => {
     res.render('index', { basePath: BASE_PATH });
 });
 
-
 // Start server
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
