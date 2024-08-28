@@ -57,7 +57,7 @@ app.use(`${BASE_PATH}/email`, authMiddleware, emailRoutes);
 app.use(`${BASE_PATH}/bulk-email`, authMiddleware, emailRoutes);
 
 // Home route
-app.get(`${BASE_PATH}/`, (req, res) => {
+app.get(`/`, (req, res) => {
     res.render('index', { basePath: BASE_PATH });
 });
 
