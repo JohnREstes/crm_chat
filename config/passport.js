@@ -8,7 +8,7 @@ const BASE_PATH = process.env.BASE_PATH || ''; // Use the BASE_PATH environment 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${BASE_PATH }/auth/google/callback`
+    callbackURL: `https://node.johnetravels.com/${BASE_PATH}/auth/google/callback`
 }, async (accessToken, refreshToken, profile, done) => {
     try {
         let user = await User.findOne({ googleId: profile.id });
