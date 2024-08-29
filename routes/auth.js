@@ -14,12 +14,12 @@ const ensureAuthenticated = (req, res, next) => {
 };
 
 // Route to handle Google OAuth login
-router.get(`${BASE_PATH}/google`, passport.authenticate('google', {
+router.get(`/google`, passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
 // Callback route after Google has authenticated the user
-router.get(`${BASE_PATH}/google/callback`, passport.authenticate('google', {
+router.get(`/google/callback`, passport.authenticate('google', {
     failureRedirect: `${BASE_PATH}/login` // Redirect to login page on failure
 }), (req, res) => {
     res.redirect(`${BASE_PATH}/`); // Redirect to home page or any other page after successful login
