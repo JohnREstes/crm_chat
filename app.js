@@ -51,10 +51,10 @@ app.use(userMiddleware);
 app.set('view engine', 'ejs');
 
 // Routes
-app.use(`${BASE_PATH}/auth`, authRoutes);
-app.use(`${BASE_PATH}/client`, authMiddleware, clientRoutes);
-app.use(`${BASE_PATH}/email`, authMiddleware, emailRoutes);
-app.use(`${BASE_PATH}/bulk-email`, authMiddleware, emailRoutes);
+app.use(`/auth`, authRoutes);
+app.use(`/client`, authMiddleware, clientRoutes);
+app.use(`/email`, authMiddleware, emailRoutes);
+app.use(`/bulk-email`, authMiddleware, emailRoutes);
 
 // Home route
 app.get(`/`, (req, res) => {
