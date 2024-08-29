@@ -26,7 +26,7 @@ router.get(`/google/callback`, passport.authenticate('google', {
 });
 
 // Route to handle logout
-router.get(`${BASE_PATH}/logout`, ensureAuthenticated, (req, res, next) => {
+router.get(`/logout`, ensureAuthenticated, (req, res, next) => {
     req.logout((err) => {
         if (err) {
             return next(err); // Handle logout error

@@ -4,6 +4,8 @@ import Client from '../models/Client.js';
 import { ensureAuthenticated } from '../config/auth.js';
 
 const router = express.Router();
+const BASE_PATH = process.env.BASE_PATH || ''; // Use the BASE_PATH environment variable
+
 
 // Define the master user ID (replace this with the actual master user ID)
 const masterUserId = process.env.MONGO_MASTER; // Replace with your master user ID
@@ -17,7 +19,7 @@ router.post('/add', async (req, res) => {
     console.log('Received data for new client:', { name, email, phone, notes, address, creditCardExpiry, creditCardCVV }); // Log non-sensitive data
     const newClient = new Client({ name, email, phone, notes, address, creditCardNumber, creditCardExpiry, creditCardCVV, user: req.user._id }); // Include address
     await newClient.save();
-    res.redirect('/clients');
+    res.redirect(`${BASE_PATH}/clients`);
 });
 
 // Edit an existing client
@@ -36,7 +38,7 @@ router.post('/edit/:id', async (req, res) => {
             }
             
             await Client.findByIdAndUpdate(req.params.id, updateData); // Include address
-            res.redirect('/clients');
+            res.redirect(`${BASE_PATH}/clients`);
         } else {
             res.status(403).send('Forbidden');
         }

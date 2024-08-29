@@ -7,6 +7,8 @@ import Client from '../models/Client.js';
 import { ensureAuthenticated } from '../config/auth.js';
 
 const router = express.Router();
+const BASE_PATH = process.env.BASE_PATH || ''; // Use the BASE_PATH environment variable
+
 
 // Middleware to ensure user is authenticated
 router.use(ensureAuthenticated);
@@ -76,10 +78,10 @@ router.post('/send', async (req, res) => {
     try {
         const command = new SendEmailCommand(params);
         await sesClient.send(command);
-        res.redirect('/email/send?success=Emails sent successfully!');
+        res.redirect(`${BASE_PATH}/email/send?success=Emails sent successfully!`);
     } catch (err) {
         console.error('Error sending email', err);
-        res.redirect('/email/send?error=Failed to send email');
+        res.redirect(`${BASE_PATH}/email/send?error=Failed to send email`);
     }
 });
 

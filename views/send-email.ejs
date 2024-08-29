@@ -17,7 +17,7 @@
         <div class="alert error"><%= error %></div>
     <% } %>
 
-    <form action="/email/send" method="POST">
+    <form action="<%= basePath || '' %>/email/send" method="POST">
         <input type="text" name="subject" placeholder="Subject" required>
         <textarea name="message" placeholder="Message" required></textarea>
 

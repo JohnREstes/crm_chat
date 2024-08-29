@@ -62,7 +62,7 @@ app.get(`/`, (req, res) => {
 });
 
 // Redirect route for '/clients'
-app.get(`${BASE_PATH}/clients`, (req, res) => {
+app.get(`/clients`, (req, res) => {
     res.redirect(`${BASE_PATH}/client`); // Redirect to the '/client' route
 });
 
