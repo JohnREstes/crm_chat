@@ -13,8 +13,9 @@ h1 {
 }
 
 form {
-    max-width: 500px;
-    margin: 20px auto;
+    width: 90%; /* Set the form width to 90% of the screen */
+    max-width: 1000px; /* Keep the max-width as a fallback for larger screens */
+    margin: 20px auto; /* Center the form horizontally */
     padding: 20px;
     background: #fff;
     border-radius: 5px;
@@ -84,4 +85,106 @@ nav ul li a:hover {
 .alert.error {
     background-color: #f8d7da;
     color: #721c24;
+}
+/* Hide additional fields initially */
+.hidden-fields {
+    display: none;
+}
+
+button.show-more {
+    background: #007bff;
+    color: #fff;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    padding: 10px 20px;
+}
+
+button.show-more:hover {
+    background: #0056b3;
+}
+
+
+/* public/css/style.css */
+.client-list {
+    list-style-type: none; /* Removes bullet points */
+    padding: 0;
+}
+
+.client-item {
+    margin-bottom: 10px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.client-summary {
+    display: flex;
+    gap: 10px; /* Space between form fields */
+}
+
+.client-summary input {
+    flex: 1;
+    min-width: 0;
+}
+
+button.toggle-details {
+    display: block;
+    margin: 10px 0; /* Space above and below the button */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.toggle-details:hover {
+    background-color: #0056b3;
+}
+
+.client-details {
+    margin-top: 10px;
+}
+
+.client-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between form fields */
+    margin-bottom: 10px; /* Space between detail items */
+}
+
+.client-detail-item input,
+.client-detail-item textarea {
+    flex: 1;
+    min-width: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+form[action*="delete"] button[type="submit"] {
+    background-color: #dc3545;
+}
+
+form[action*="delete"] button[type="submit"]:hover {
+    background-color: #c82333;
 }

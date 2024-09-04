@@ -1,4 +1,5 @@
 // routes/email.js
+// routes/email.js
 
 import express from 'express';
 import { SendEmailCommand } from '@aws-sdk/client-ses';
@@ -9,14 +10,14 @@ import { ensureAuthenticated } from '../config/auth.js';
 const router = express.Router();
 const BASE_PATH = process.env.BASE_PATH || ''; // Use the BASE_PATH environment variable
 
-
 // Middleware to ensure user is authenticated
 router.use(ensureAuthenticated);
 
 // Route to view the email page
 router.get('/', async (req, res) => {
     try {
-        const clients = await Client.find({ user: req.user._id }); // Fetch clients for the authenticated user
+        // Fetch clients for the authenticated user and sort them alphabetically by name
+        const clients = await Client.find({ user: req.user._id }).sort({ name: 1 });
         res.render('send-email', { 
             clients, 
             success: req.query.success, 
@@ -31,7 +32,8 @@ router.get('/', async (req, res) => {
 // Show form for sending bulk email
 router.get('/send', async (req, res) => {
     try {
-        const clients = await Client.find({ user: req.user._id }); // Fetch clients for the authenticated user
+        // Fetch clients for the authenticated user and sort them alphabetically by name
+        const clients = await Client.find({ user: req.user._id }).sort({ name: 1 });
         res.render('send-email', { 
             clients, 
             success: req.query.success, 

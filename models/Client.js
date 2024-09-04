@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 
 // Encryption function
 const encrypt = (text) => {
+    console.log("running encrypt " + text)
     const algorithm = 'aes-256-cbc';
     const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex'); // Ensure key is in correct format
     const iv = crypto.randomBytes(16); // Initialization vector
@@ -20,12 +21,13 @@ const encrypt = (text) => {
 
 // Decryption function
 const decrypt = (text) => {
+    console.log("running decrypt " + text)
     if (!text) return ''; // Return empty string if text is not provided
 
     const algorithm = 'aes-256-cbc';
     const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
     const textParts = text.split(':');
-    if (textParts.length !== 2) return ''; // Invalid format
+    if (textParts.length !== 2) return text; // Invalid format
 
     const iv = Buffer.from(textParts.shift(), 'hex');
     const encryptedText = textParts.join(':');
@@ -61,8 +63,17 @@ clientSchema.pre('save', function(next) {
     next();
 });
 
+// Static method to encrypt credit card number
+//clientSchema.statics.encryptCreditCardNumber = (creditCardNumber) => encrypt(creditCardNumber);
+// Method to encrypt credit card number
+clientSchema.statics.encryptCreditCardNumber = function(creditCardNumber) {
+    console.log("encrypt schema " + creditCardNumber)
+    return encrypt(creditCardNumber);
+};
+
 // Method to decrypt credit card number
 clientSchema.methods.decryptCreditCardNumber = function() {
+    console.log("decrypt schema " + this.creditCardNumber)
     return decrypt(this.creditCardNumber);
 };
 

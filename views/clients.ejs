@@ -1,3 +1,4 @@
+<!-- views/clients.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clients</title>
     <link rel="stylesheet" href="<%= basePath || '' %>/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome for icons -->
 </head>
 <body>
     <%- include('partials/navbar', { basePath: basePath }) %>
@@ -12,57 +14,101 @@
 
     <!-- Form to add a new client -->
     <form action="<%= basePath || '' %>/client/add" method="POST">
-        <h2>Add New Client</h2>
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="phone" placeholder="Phone" required>
-        <textarea name="notes" placeholder="Notes"></textarea>
-        <input type="text" name="address" placeholder="Address"> <!-- New field -->
-        <input type="text" name="creditCardNumber" placeholder="Credit Card Number"> <!-- New field -->
-        <input type="text" name="creditCardExpiry" placeholder="Expiry Date (MM/YY)"> <!-- New field -->
-        <input type="text" name="creditCardCVV" placeholder="CVV"> <!-- New field -->
-        <button type="submit">Add Client</button>
+        <button type="button" class="toggle-add-client">Add New Client</button>
+        <div class="add-client-details hidden">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" placeholder="Phone" required>
+
+            <label for="notes">Notes:</label>
+            <textarea id="notes" name="notes" placeholder="Notes"></textarea>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" placeholder="Address">
+
+            <label for="creditCardNumber">Credit Card Number:</label>
+            <input type="text" id="creditCardNumber" name="creditCardNumber" placeholder="Credit Card Number">
+
+            <label for="creditCardExpiry">Expiry Date (MM/YY):</label>
+            <input type="text" id="creditCardExpiry" name="creditCardExpiry" placeholder="Expiry Date (MM/YY)">
+
+            <label for="creditCardCVV">CVV:</label>
+            <input type="text" id="creditCardCVV" name="creditCardCVV" placeholder="CVV">
+            
+            <button type="submit">Add Client</button>
+        </div>
     </form>
-    
+
     <!-- List of existing clients -->
-    <ul>
+    <ul class="client-list">
         <% clients.forEach(client => { %>
-        <li>
+        <li class="client-item">
             <form action="<%= basePath || '' %>/client/edit/<%= client._id %>" method="POST">
-                <input type="text" name="name" value="<%= client.name %>" required>
-                <input type="email" name="email" value="<%= client.email %>" required>
-                <input type="text" name="phone" value="<%= client.phone %>" required>
-                <textarea name="notes"><%= client.notes %></textarea>
-                <input type="text" name="address" value="<%= client.address %>"> <!-- New field -->
-
-                <!-- Display the last 4 digits always -->
-                <input type="text" name="creditCardNumber" 
-                    value="<%= client.decryptCreditCardNumber() ? client.decryptCreditCardNumber().slice(-4) : '' %>" readonly> <!-- Last 4 digits -->
-                
-                <!-- Full Credit Card Number with Show/Hide Toggle -->
-                <input type="password" id="full_cc_<%= client._id %>" 
-                    value="<%= client.decryptCreditCardNumber() ? client.decryptCreditCardNumber() : '' %>" 
-                    style="display:none;" readonly>
-                <button type="button" onclick="toggleCreditCard('full_cc_<%= client._id %>')">Show/Hide</button>
-
-                <input type="text" name="creditCardExpiry" value="<%= client.creditCardExpiry %>"> <!-- New field -->
-                <input type="text" name="creditCardCVV" value="<%= client.creditCardCVV %>"> <!-- New field -->
-                
-                <button type="submit">Save</button>
+                <div class="client-summary">
+                    <input type="text" id="name_<%= client._id %>" name="name" value="<%= client.name %>" required>
+                    <input type="email" id="email_<%= client._id %>" name="email" value="<%= client.email %>" required>
+                    <input type="text" id="phone_<%= client._id %>" name="phone" value="<%= client.phone %>" required>
+                    <i class="fas fa-trash delete-icon" data-client-id="<%= client._id %>"></i>
+                </div>
+                <button type="button" class="toggle-details">Show More</button>
+                <div class="client-details hidden">
+                    <div class="client-detail-item">
+                        <input type="text" id="address_<%= client._id %>" name="address" placeholder="Address" value="<%= client.address %>">
+                    </div>
+                    <div class="client-detail-item">
+                        <textarea id="notes_<%= client._id %>" name="notes" rows="1" placeholder="Notes"><%= client.notes %></textarea>
+                    </div>
+                    <div class="client-detail-item">
+                        <input type="text" id="creditCardNumber_<%= client._id %>" name="creditCardNumber" placeholder="Credit Card Number" value="<%= client.decryptCreditCardNumber() %>">
+                        <input type="text" id="creditCardExpiry_<%= client._id %>" name="creditCardExpiry" placeholder="MM/YY" value="<%= client.creditCardExpiry %>">
+                        <input type="text" id="creditCardCVV_<%= client._id %>" name="creditCardCVV" placeholder="CVV" value="<%= client.creditCardCVV %>">
+                    </div>
+                    <button type="submit">Save</button>
+                </div>
             </form>
         </li>
         <% }); %>
     </ul>
 
     <script>
-        function toggleCreditCard(id) {
-            const input = document.getElementById(id);
-            if (input.type === 'password') {
-                input.type = 'text';
-            } else {
-                input.type = 'password';
-            }
-        }
+        // Toggle details visibility for existing clients
+        document.querySelectorAll('.toggle-details').forEach(button => {
+            button.addEventListener('click', function() {
+                const details = this.closest('.client-item').querySelector('.client-details');
+                details.classList.toggle('hidden');
+                this.textContent = details.classList.contains('hidden') ? 'Show More' : 'Show Less';
+            });
+        });
+
+        // Toggle visibility of the "Add New Client" fields
+        document.querySelector('.toggle-add-client').addEventListener('click', function() {
+            const addClientDetails = document.querySelector('.add-client-details');
+            addClientDetails.classList.toggle('hidden');
+            this.textContent = addClientDetails.classList.contains('hidden') ? 'Add New Client' : 'Hide Client Details';
+        });
+
+        // Delete client functionality
+        document.querySelectorAll('.delete-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete this client?')) {
+                    const clientId = this.getAttribute('data-client-id');
+                    fetch(`<%= basePath || '' %>/client/delete/${clientId}`, { method: 'POST' })
+                        .then(response => {
+                            if (response.ok) {
+                                this.closest('.client-item').remove();
+                            } else {
+                                alert('Error deleting client');
+                            }
+                        });
+                }
+            });
+        });
     </script>
+    
 </body>
 </html>
